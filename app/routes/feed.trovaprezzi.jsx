@@ -3,6 +3,7 @@
 const SHOP_DOMAIN = "e9d9c4-38.myshopify.com";
 const FEED_BRAND_FALLBACK = "Carpe Diem Shop";
 const FEED_CATEGORY_FALLBACK = "Altro";
+const MAX_DESCRIPTION_LENGTH = 1000;
 
 function escapeXml(value) {
   return String(value ?? "")
@@ -62,6 +63,13 @@ function normalizeCategoryPath(value) {
     .map((part) => part.trim())
     .filter(Boolean)
     .join(";");
+}
+
+function truncateText(value, maxLength) {
+  const text = normalizeText(value);
+  if (!text) return "";
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 1).trim()}…`;
 }
 
 function buildTrovaprezziCategory(customCategory, shopifyCategoryFullName, productType) {
@@ -214,14 +222,17 @@ function buildProductRecord(node, primaryDomainUrl) {
       : "";
 
   const brand = normalizeText(node?.vendor) || FEED_BRAND_FALLBACK;
-  const description = normalizeText(stripHtml(node?.descriptionHtml));
+  const cleanDescription = truncateText(
+    stripHtml(node?.descriptionHtml),
+    MAX_DESCRIPTION_LENGTH
+  );
 
   return {
     id: normalizeText(node?.id),
     status: normalizeText(node?.status),
     sku: normalizeText(variant?.sku),
-    title: normalizeText(node?.title),
-    description,
+    title: truncateText(node?.title, 200),
+    description: cleanDescription,
     link: normalizeUrl(productUrl),
     image: normalizeUrl(node?.featuredImage?.url),
     price: normalizePrice(variant?.price),

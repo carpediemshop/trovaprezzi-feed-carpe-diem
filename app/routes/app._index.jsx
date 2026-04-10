@@ -1,10 +1,10 @@
 ﻿import { useLoaderData } from "react-router";
 
-const FORCED_SHOP_DOMAIN = "e9d9c4-38.myshopify.com";
+const SHOP_DOMAIN = "e9d9c4-38.myshopify.com";
 
 export async function loader() {
   return {
-    shop: FORCED_SHOP_DOMAIN,
+    shop: SHOP_DOMAIN,
   };
 }
 
@@ -14,7 +14,7 @@ export default function AppIndex() {
   const baseUrl =
     typeof window !== "undefined" ? window.location.origin : "";
 
-  const feedUrl = `${baseUrl}/feed/trovaprezzi`;
+  const feedUrl = `${baseUrl}/feed/trovaprezzi.xml`;
 
   async function copyFeedUrl() {
     try {
@@ -32,7 +32,7 @@ export default function AppIndex() {
           <div style={styles.heroBadge}>Carpe Diem Shop</div>
           <h1 style={styles.title}>Trovaprezzi Feed</h1>
           <p style={styles.subtitle}>
-            Pannello di controllo del feed XML pubblico collegato allo store reale.
+            Feed XML pubblico collegato allo store reale.
           </p>
         </div>
 
@@ -63,10 +63,10 @@ export default function AppIndex() {
           </div>
 
           <div style={styles.card}>
-            <div style={styles.cardLabel}>Stato feed</div>
-            <div style={styles.statusBadge}>ATTIVO</div>
+            <div style={styles.cardLabel}>Stato</div>
+            <div style={styles.statusBadge}>ONLINE</div>
             <p style={styles.text}>
-              Il feed pubblico è pronto per il controllo finale e per il deploy definitivo.
+              Il feed XML con estensione .xml è pronto da consegnare a Trovaprezzi.
             </p>
           </div>
         </div>
@@ -78,8 +78,7 @@ export default function AppIndex() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background:
-      "linear-gradient(180deg, #0f172a 0%, #111827 35%, #172033 100%)",
+    background: "linear-gradient(180deg, #0f172a 0%, #111827 35%, #172033 100%)",
     padding: "40px 20px",
     boxSizing: "border-box",
     fontFamily:
